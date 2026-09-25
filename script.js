@@ -1,305 +1,380 @@
 /* =========================================
    KELTEC SOLUTIONS
-   JAVASCRIPT
+   Main JavaScript
 ========================================= */
 
+document.addEventListener("DOMContentLoaded", () => {
 
-/* =========================================
-   MOBILE NAVIGATION
-========================================= */
+    /* =========================================
+       ELEMENTS
+    ========================================= */
 
-const menuToggle = document.getElementById("menuToggle");
-const navLinks = document.getElementById("navLinks");
+    const header = document.getElementById("header");
+    const menuToggle = document.getElementById("menuToggle");
+    const navbar = document.getElementById("navbar");
+    const navLinks = document.querySelectorAll(".nav-link");
+    const backToTop = document.getElementById("backToTop");
+    const contactForm = document.getElementById("contactForm");
+    const formMessage = document.getElementById("formMessage");
+    const yearElement = document.getElementById("year");
 
-menuToggle.addEventListener("click", () => {
 
-    navLinks.classList.toggle("show");
+    /* =========================================
+       CURRENT YEAR
+    ========================================= */
 
-    const icon = menuToggle.querySelector("i");
-
-    if (navLinks.classList.contains("show")) {
-
-        icon.classList.remove("fa-bars");
-
-        icon.classList.add("fa-xmark");
-
-    } else {
-
-        icon.classList.remove("fa-xmark");
-
-        icon.classList.add("fa-bars");
+    if (yearElement) {
+        yearElement.textContent = new Date().getFullYear();
     }
-});
 
 
-/* CLOSE MOBILE MENU WHEN LINK IS CLICKED */
+    /* =========================================
+       MOBILE MENU
+    ========================================= */
 
-document.querySelectorAll(".nav-links a").forEach(link => {
+    if (menuToggle && navbar) {
 
-    link.addEventListener("click", () => {
+        menuToggle.addEventListener("click", () => {
 
-        navLinks.classList.remove("show");
+            navbar.classList.toggle("active");
 
-        const icon = menuToggle.querySelector("i");
+            document.body.classList.toggle("menu-open");
 
-        icon.classList.remove("fa-xmark");
+            const icon = menuToggle.querySelector("i");
 
-        icon.classList.add("fa-bars");
-    });
+            if (navbar.classList.contains("active")) {
 
-});
+                icon.classList.remove("fa-bars");
+                icon.classList.add("fa-xmark");
 
+            } else {
 
-/* =========================================
-   ACTIVE NAVIGATION LINK
-========================================= */
+                icon.classList.remove("fa-xmark");
+                icon.classList.add("fa-bars");
 
-const sections = document.querySelectorAll("section[id]");
-const navItems = document.querySelectorAll(".nav-links a");
-
-window.addEventListener("scroll", () => {
-
-    let current = "";
-
-    sections.forEach(section => {
-
-        const sectionTop = section.offsetTop - 150;
-
-        const sectionHeight = section.offsetHeight;
-
-        if (
-            window.scrollY >= sectionTop &&
-            window.scrollY < sectionTop + sectionHeight
-        ) {
-
-            current = section.getAttribute("id");
-        }
-
-    });
-
-
-    navItems.forEach(link => {
-
-        link.classList.remove("active");
-
-        if (
-            link.getAttribute("href") === `#${current}`
-        ) {
-
-            link.classList.add("active");
-        }
-
-    });
-
-});
-
-
-/* =========================================
-   SCROLL REVEAL
-========================================= */
-
-const revealElements = document.querySelectorAll(".reveal");
-
-const revealObserver = new IntersectionObserver(
-
-    (entries, observer) => {
-
-        entries.forEach(entry => {
-
-            if (entry.isIntersecting) {
-
-                entry.target.classList.add("visible");
-
-                observer.unobserve(entry.target);
             }
 
         });
 
-    },
-
-    {
-        threshold: 0.12
-    }
-
-);
-
-revealElements.forEach(element => {
-
-    revealObserver.observe(element);
-
-});
-
-
-/* =========================================
-   BACK TO TOP
-========================================= */
-
-const backTop = document.getElementById("backTop");
-
-window.addEventListener("scroll", () => {
-
-    if (window.scrollY > 500) {
-
-        backTop.classList.add("show");
-
-    } else {
-
-        backTop.classList.remove("show");
-    }
-
-});
-
-
-backTop.addEventListener("click", () => {
-
-    window.scrollTo({
-
-        top: 0,
-
-        behavior: "smooth"
-
-    });
-
-});
-
-
-/* =========================================
-   CONTACT FORM
-========================================= */
-
-const contactForm = document.getElementById("contactForm");
-
-const formMessage = document.getElementById("formMessage");
-
-contactForm.addEventListener("submit", function(event) {
-
-    event.preventDefault();
-
-    const name =
-        document.getElementById("name").value.trim();
-
-    const email =
-        document.getElementById("email").value.trim();
-
-    const service =
-        document.getElementById("service").value;
-
-    const message =
-        document.getElementById("message").value.trim();
-
-
-    if (
-        !name ||
-        !email ||
-        !service ||
-        !message
-    ) {
-
-        formMessage.style.color = "#ef4444";
-
-        formMessage.textContent =
-            "Please complete all fields.";
-
-        return;
     }
 
 
-    /*
-       This is currently a front-end form.
+    /* =========================================
+       CLOSE MOBILE MENU
+    ========================================= */
 
-       Later we can connect it to:
-       - WhatsApp
-       - EmailJS
-       - Formspree
-       - PHP backend
-       - Node.js backend
-       - Your own database
-    */
+    navLinks.forEach(link => {
 
+        link.addEventListener("click", () => {
 
-    formMessage.style.color = "#22c55e";
+            navbar.classList.remove("active");
 
-    formMessage.textContent =
-        "Thank you! Your message has been received.";
+            document.body.classList.remove("menu-open");
 
-    contactForm.reset();
+            const icon = menuToggle.querySelector("i");
 
-});
-
-
-/* =========================================
-   CURRENT YEAR
-========================================= */
-
-document.getElementById("year").textContent =
-    new Date().getFullYear();
-
-
-/* =========================================
-   SMOOTH NAVIGATION
-========================================= */
-
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-
-    anchor.addEventListener("click", function(event) {
-
-        const targetId =
-            this.getAttribute("href");
-
-        if (targetId === "#") {
-
-            event.preventDefault();
-
-            return;
-        }
-
-
-        const target =
-            document.querySelector(targetId);
-
-        if (!target) return;
-
-        event.preventDefault();
-
-        const headerHeight = 75;
-
-        const targetPosition =
-            target.getBoundingClientRect().top +
-            window.scrollY -
-            headerHeight;
-
-        window.scrollTo({
-
-            top: targetPosition,
-
-            behavior: "smooth"
+            icon.classList.remove("fa-xmark");
+            icon.classList.add("fa-bars");
 
         });
 
     });
 
-});
+
+    /* =========================================
+       HEADER SCROLL EFFECT
+    ========================================= */
+
+    function handleHeader() {
+
+        if (window.scrollY > 40) {
+
+            header.classList.add("scrolled");
+
+        } else {
+
+            header.classList.remove("scrolled");
+
+        }
+
+    }
+
+    window.addEventListener("scroll", handleHeader);
+
+    handleHeader();
 
 
-/* =========================================
-   SUBTLE HERO PARALLAX
-========================================= */
+    /* =========================================
+       ACTIVE NAVIGATION
+    ========================================= */
 
-const heroVisual =
-    document.querySelector(".hero-visual");
+    const sections = document.querySelectorAll("section[id]");
 
-window.addEventListener("mousemove", (event) => {
+    function updateActiveNavigation() {
 
-    if (!heroVisual) return;
+        const scrollPosition = window.scrollY + 150;
 
-    if (window.innerWidth < 900) return;
+        sections.forEach(section => {
 
-    const x =
-        (window.innerWidth / 2 - event.clientX) / 80;
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.offsetHeight;
+            const sectionId = section.getAttribute("id");
 
-    const y =
-        (window.innerHeight / 2 - event.clientY) / 80;
+            if (
+                scrollPosition >= sectionTop &&
+                scrollPosition < sectionTop + sectionHeight
+            ) {
 
-    heroVisual.style.transform =
-        `translate(${x}px, ${y}px)`;
+                navLinks.forEach(link => {
+
+                    link.classList.remove("active");
+
+                    if (link.getAttribute("href") === `#${sectionId}`) {
+
+                        link.classList.add("active");
+
+                    }
+
+                });
+
+            }
+
+        });
+
+    }
+
+    window.addEventListener("scroll", updateActiveNavigation);
+
+    updateActiveNavigation();
+
+
+    /* =========================================
+       SCROLL REVEAL
+    ========================================= */
+
+    const revealElements = document.querySelectorAll(".reveal");
+
+    const revealObserver = new IntersectionObserver(
+        entries => {
+
+            entries.forEach(entry => {
+
+                if (entry.isIntersecting) {
+
+                    entry.target.classList.add("visible");
+
+                    revealObserver.unobserve(entry.target);
+
+                }
+
+            });
+
+        },
+        {
+            threshold: 0.12
+        }
+    );
+
+
+    revealElements.forEach(element => {
+
+        revealObserver.observe(element);
+
+    });
+
+
+    /* =========================================
+       BACK TO TOP
+    ========================================= */
+
+    function handleBackToTop() {
+
+        if (window.scrollY > 500) {
+
+            backToTop.classList.add("show");
+
+        } else {
+
+            backToTop.classList.remove("show");
+
+        }
+
+    }
+
+    window.addEventListener("scroll", handleBackToTop);
+
+    handleBackToTop();
+
+
+    if (backToTop) {
+
+        backToTop.addEventListener("click", () => {
+
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+
+        });
+
+    }
+
+
+    /* =========================================
+       CONTACT FORM
+    ========================================= */
+
+    if (contactForm) {
+
+        contactForm.addEventListener("submit", event => {
+
+            event.preventDefault();
+
+            const name = document.getElementById("name").value.trim();
+            const phone = document.getElementById("phone").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const service = document.getElementById("service").value;
+            const message = document.getElementById("message").value.trim();
+
+
+            /* Basic validation */
+
+            if (!name || !phone || !email || !service || !message) {
+
+                formMessage.textContent =
+                    "Please fill in all the required fields.";
+
+                formMessage.className =
+                    "form-message error";
+
+                return;
+
+            }
+
+
+            /* Email validation */
+
+            const emailPattern =
+                /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (!emailPattern.test(email)) {
+
+                formMessage.textContent =
+                    "Please enter a valid email address.";
+
+                formMessage.className =
+                    "form-message error";
+
+                return;
+
+            }
+
+
+            /*
+                FRONTEND DEMO
+
+                The form currently does not send data
+                to a server. We will connect it to a
+                backend later.
+            */
+
+            formMessage.textContent =
+                `Thank you, ${name}. Your enquiry has been prepared successfully.`;
+
+            formMessage.className =
+                "form-message success";
+
+
+            contactForm.reset();
+
+        });
+
+    }
+
+
+    /* =========================================
+       SMOOTH ANCHOR LINKS
+    ========================================= */
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+
+        anchor.addEventListener("click", event => {
+
+            const targetId =
+                anchor.getAttribute("href");
+
+            if (targetId === "#") {
+                return;
+            }
+
+            const target =
+                document.querySelector(targetId);
+
+            if (!target) {
+                return;
+            }
+
+            event.preventDefault();
+
+            target.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+
+        });
+
+    });
+
+
+    /* =========================================
+       SERVICE CARD HOVER EFFECT
+    ========================================= */
+
+    const serviceCards =
+        document.querySelectorAll(".service-card");
+
+    serviceCards.forEach(card => {
+
+        card.addEventListener("mouseenter", () => {
+
+            card.style.setProperty(
+                "--hover-y",
+                "-8px"
+            );
+
+        });
+
+        card.addEventListener("mouseleave", () => {
+
+            card.style.setProperty(
+                "--hover-y",
+                "0px"
+            );
+
+        });
+
+    });
+
+
+    /* =========================================
+       ESCAPE KEY CLOSES MOBILE MENU
+    ========================================= */
+
+    document.addEventListener("keydown", event => {
+
+        if (event.key === "Escape") {
+
+            navbar.classList.remove("active");
+
+            document.body.classList.remove("menu-open");
+
+            const icon = menuToggle.querySelector("i");
+
+            icon.classList.remove("fa-xmark");
+            icon.classList.add("fa-bars");
+
+        }
+
+    });
+
 });
